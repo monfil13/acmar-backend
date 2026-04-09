@@ -12,25 +12,37 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 const app = express();
 
 /** =========================
- * Config
+ * Configuración de CORS
  * ========================= */
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://acmar-frontend.vercel.app',
+];
 
-/** =========================
- * Middlewares globales
- * ========================= */
 app.use(
   cors({
-    origin: FRONTEND_ORIGIN,
+    origin: function (origin, callback) {
+      // Permitir requests sin origin (Postman, curl, etc.)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('CORS no permitido: ' + origin));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
-// Preflight (NO usar '*' porque truena con path-to-regexp en tu setup)
+// Preflight
 app.options(/.*/, cors());
 
+/** =========================
+ * Middlewares globales
+ * ========================= */
 app.use(express.json({ limit: '2mb' }));
 
 /** =========================
@@ -87,6 +99,14 @@ app.use((req, res) => {
  * ========================= */
 app.use((err, req, res, next) => {
   console.error('❌ Error no controlado:', err);
+
+  // Error específico de CORS
+  if (err.message.includes('CORS')) {
+    return res.status(403).json({
+      message: err.message,
+    });
+  }
+
   res.status(err.status || 500).json({
     message: err.message || 'Error interno del servidor',
   });
