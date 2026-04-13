@@ -16,7 +16,7 @@ const app = express();
  * ========================= */
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://acmar-frontend.vercel.app',
+  'https://accelmar-inventario.vercel.app',
 ];
 
 app.use(
