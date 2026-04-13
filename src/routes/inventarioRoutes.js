@@ -607,6 +607,24 @@ router.get('/:material', authenticateToken, async (req, res) => {
   }
 });
 
+
+router.get('/ubicaciones', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT DISTINCT ubicacion_actual
+      FROM inventario_v2
+      WHERE ubicacion_actual IS NOT NULL
+      ORDER BY ubicacion_actual
+    `)
+
+    const ubicaciones = result.rows.map(r => r.ubicacion_actual)
+
+    res.json(ubicaciones)
+  } catch (error) {
+    res.status(500).json({ message: 'Error obteniendo ubicaciones' })
+  }
+})
+
 /** =========================
  * PATCH /inventario/:material
  * Reglas:
