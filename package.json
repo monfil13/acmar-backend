@@ -1,30 +1,41 @@
 {
-  "name": "backend",
+  "name": "acmar-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "API de inventario y notas - ACMAR",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:prod": "NODE_ENV=production node server.js",
+    "clean": "rimraf uploads/*",
+    "restart": "npm run clean && npm run dev"
   },
-  "keywords": [],
+  "keywords": [
+    "inventario",
+    "erp",
+    "node",
+    "express",
+    "acmar"
+  ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+    "axios": "^1.15.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
-    "csv-parser": "^3.2.0",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.3.1",
+    "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "multer": "^2.1.1",
     "pdfkit": "^0.17.2",
     "pg": "^8.18.0",
-    "uuid": "^13.0.0",
-    "xlsx": "^0.18.5"
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "rimraf": "^6.0.1"
   }
 }
